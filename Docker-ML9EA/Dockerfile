@@ -4,7 +4,7 @@
 # https://hub.docker.com/r/patrickmcelwee/marklogic-dependencies/
 # Thanks for the great starting point!!!
 #
-FROM centos:centos7
+FROM centos:7
 MAINTAINER Alan Johnson <alan.johnson@marklogic.com>
 
 # Get any CentOS updates then clear the Docker cache
@@ -19,7 +19,6 @@ RUN yum -y install initscripts && yum clean all
 # Set environment variable that MarkLogic uses
 ENV MARKLOGIC_INSTALL_DIR /opt/MarkLogic
 ENV MARKLOGIC_DATA_DIR /data
-ENV LD_LIBRARY_PATH /opt/MarkLogic/lib:/data/Lib
 
 ENV MARKLOGIC_FSTYPE ext4
 ENV MARKLOGIC_USER daemon
