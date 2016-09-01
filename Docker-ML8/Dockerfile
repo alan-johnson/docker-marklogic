@@ -4,7 +4,7 @@
 # https://hub.docker.com/r/patrickmcelwee/marklogic-dependencies/
 #
 # Get the latest CentOS 7 image
-FROM centos:centos7
+FROM centos:7
 MAINTAINER Alan Johnson <alan.johnson@marklogic.com>
 
 # Get any CentOS updates then clear the Docker cache
@@ -13,10 +13,12 @@ RUN yum -y update && yum clean all
 # Install MarkLogic dependencies
 RUN yum -y install glibc.i686 gdb.x86_64 redhat-lsb.x86_64 && yum clean all
 
+# install the initscripts package so MarkLogic starts ok
+RUN yum -y install initscripts && yum clean all
+
 # Set environment variable that MarkLogic uses
 ENV MARKLOGIC_INSTALL_DIR /opt/MarkLogic
 ENV MARKLOGIC_DATA_DIR /data
-ENV LD_LIBRARY_PATH /opt/MarkLogic/lib:/data/Lib
 
 ENV MARKLOGIC_FSTYPE ext4
 ENV MARKLOGIC_USER daemon
@@ -42,4 +44,4 @@ RUN yum -y install /tmp/MarkLogic.rpm && rm /tmp/MarkLogic.rpm
 EXPOSE 7997 7998 7999 8000 8001 8002
 
 # Define default command (which avoids immediate shutdown)
-CMD /opt/MarkLogic/bin/MarkLogic && tail -f /dev/null
+CMD /etc/init.d/MarkLogic start && tail -f /dev/null

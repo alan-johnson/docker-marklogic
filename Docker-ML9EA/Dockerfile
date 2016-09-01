@@ -13,6 +13,9 @@ RUN yum -y update && yum clean all
 # Install MarkLogic dependencies
 RUN yum -y install glibc.i686 gdb.x86_64 redhat-lsb.x86_64
 
+# install the initscripts package so MarkLogic starts ok
+RUN yum -y install initscripts && yum clean all
+
 # Set environment variable that MarkLogic uses
 ENV MARKLOGIC_INSTALL_DIR /opt/MarkLogic
 ENV MARKLOGIC_DATA_DIR /data
@@ -54,4 +57,4 @@ RUN cp /tmp/task-server-properties-model.xqy /opt/MarkLogic/Modules/MarkLogic/ma
 RUN cp /tmp/request-model.xqy /opt/MarkLogic/Modules/MarkLogic/manage/models/request-model.xqy
 
 # Define default command (which avoids immediate shutdown)
-CMD /opt/MarkLogic/bin/MarkLogic && tail -f /dev/null
+CMD /etc/init.d/MarkLogic start && tail -f /dev/null
