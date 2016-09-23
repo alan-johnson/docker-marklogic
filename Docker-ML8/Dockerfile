@@ -16,21 +16,8 @@ RUN yum -y install glibc.i686 gdb.x86_64 redhat-lsb.x86_64 && yum clean all
 # install the initscripts package so MarkLogic starts ok
 RUN yum -y install initscripts && yum clean all
 
-# Set environment variable that MarkLogic uses
-ENV MARKLOGIC_INSTALL_DIR /opt/MarkLogic
-ENV MARKLOGIC_DATA_DIR /data
-
-ENV MARKLOGIC_FSTYPE ext4
-ENV MARKLOGIC_USER daemon
-ENV MARKLOGIC_PID_FILE /var/run/MarkLogic.pid
-ENV MARKLOGIC_MLCMD_PID_FILE /var/run/mlcmd.pid
-ENV MARKLOGIC_UMASK 022
-
 # Set the Path
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/MarkLogic/mlcmd/bin
-
-# Install VIM for simple text editing needs
-RUN yum -y install vim && yum clean all
 
 # Copy the MarkLogic installer to a temp directory in the Docker image being built
 COPY MarkLogic-RHEL7-8.0-5.5.x86_64.rpm /tmp/MarkLogic.rpm
@@ -39,9 +26,10 @@ COPY MarkLogic-RHEL7-8.0-5.5.x86_64.rpm /tmp/MarkLogic.rpm
 RUN yum -y install /tmp/MarkLogic.rpm && rm /tmp/MarkLogic.rpm
 
 # Expose MarkLogic Server ports
-# Also expose any ports your own MarkLogic App Servers use such as
-# HTTP, REST and XDBC App Servers for your applications
+# These expose ports between Docker Containers.
+# Publish your application ports in the Docker run command using -p (See Docker Documentation)
 EXPOSE 7997 7998 7999 8000 8001 8002
 
-# Define default command (which avoids immediate shutdown)
+# Start MarkLogic from the init.d script
+# Define default command for Docker to run (which avoids immediate shutdown)
 CMD /etc/init.d/MarkLogic start && tail -f /dev/null

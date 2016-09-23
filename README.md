@@ -16,8 +16,7 @@ Please use the GitHub Issues feature to report any issues found or updates.
 <li>Download the correct Dockerfile
     <ul>
       <li>Docker-ML8 folder - contains the Dockerfile for MarkLogic 8.
-      <li>Docker-ML9EA folder - contains the Dockerfile for MarkLogic 9 Early Access. The folder also contains some XQuery files necessary to install MarkLogic 9 EA2 successfully in the Docker image.
-      <br/><b>Note:</b> this has been tested under Early Access 2 only.
+      <li>Docker-ML9EA folder - contains the Dockerfile for MarkLogic 9 Early Access. With MarkLogic 9 EA3, the Dockerfile is essentially the same as the MarkLogic version 8. The name of the .rpm differs
     </ul>
 <li>Use the instructions to create your Docker container.
   <ul>
