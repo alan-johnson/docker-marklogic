@@ -1,0 +1,54 @@
+# Create a MarkLogic 3-node cluster. The Dockerfile for each node
+#  is set to be in a sub-directory where this .yml file is localed
+#  called "Docker-ML8"
+version: '2'
+services:
+  node1.local:
+    build: .
+    image: ml-cluster:8.0-5.5
+    expose:
+      - "7997"
+      - "7998"
+      - "7999"
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    hostname: node1.local
+    container_name: node1
+  node2.local:
+    build: .
+    image: ml-cluster:8.0-5.5
+    expose:
+      - "7997"
+      - "7998"
+      - "7999"
+    ports:
+      - "18000:8000"
+      - "18001:8001"
+      - "18002:8002"
+    hostname: node2.local
+    container_name: node2
+    depends_on:
+      - node1.local
+    links:
+      - node1.local
+  node3.local:
+    build: .
+    image: ml-cluster:8.0-5.5
+    expose:
+      - "7997"
+      - "7998"
+      - "7999"
+    ports:
+      - "28000:8000"
+      - "28001:8001"
+      - "28002:8002"
+    hostname: node3.local
+    container_name: node3
+    depends_on:
+      - node1.local
+      - node2.local
+    links:
+      - node1.local
+      - node2.local
