@@ -1,11 +1,8 @@
-# Create a MarkLogic 3-node cluster. The Dockerfile for each node
-#  is set to be in a sub-directory where this .yml file is localed
-#  called "Docker-ML8"
 version: '2'
 services:
-  node1.local:
+  ml8node1: 
     build: .
-    image: ml-cluster:8.0-5.5
+    image: ml8:build
     expose:
       - "7997"
       - "7998"
@@ -14,11 +11,11 @@ services:
       - "8000:8000"
       - "8001:8001"
       - "8002:8002"
-    hostname: node1.local
-    container_name: node1
-  node2.local:
-    build: .
-    image: ml-cluster:8.0-5.5
+      - "8010:8010"
+    hostname: "ml1.local"
+    container_name: "ml1.local"
+  ml8node2:
+    image: ml8:build
     expose:
       - "7997"
       - "7998"
@@ -27,15 +24,13 @@ services:
       - "18000:8000"
       - "18001:8001"
       - "18002:8002"
-    hostname: node2.local
-    container_name: node2
-    depends_on:
-      - node1.local
+      - "18010:8010"
+    hostname: "ml2.local"
+    container_name: "ml2.local"
     links:
-      - node1.local
-  node3.local:
-    build: .
-    image: ml-cluster:8.0-5.5
+      - ml8node1:ml8node1
+  ml8node3:
+    image: ml8:build
     expose:
       - "7997"
       - "7998"
@@ -44,11 +39,9 @@ services:
       - "28000:8000"
       - "28001:8001"
       - "28002:8002"
-    hostname: node3.local
-    container_name: node3
-    depends_on:
-      - node1.local
-      - node2.local
+      - "28010:8010"
+    hostname: "ml3.local"
+    container_name: "ml3.local"
     links:
-      - node1.local
-      - node2.local
+      - ml8node1:ml8node1
+      - ml8node2:ml8node2
