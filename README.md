@@ -17,6 +17,7 @@ Please use the GitHub Issues feature to report any issues found or updates.
     <ul>
       <li>Docker-ML8 folder - contains the Dockerfile for MarkLogic 8.
       <li>Docker-ML9EA folder - contains the Dockerfile for MarkLogic 9 Early Access. With MarkLogic 9 EA3, the Dockerfile is essentially the same as the MarkLogic version 8. The name of the .rpm differs
+      <li>Check the name of the MarkLogic .rpm in the Dockerfile against the one you've downloaded. Rename the name of the .rpm in the Dockerfile as necessary.
     </ul>
 <li>Use the instructions to create your Docker container.
   <ul>
@@ -34,7 +35,7 @@ Please use the GitHub Issues feature to report any issues found or updates.
 <li>Download the <code>docker-compose.yml</code> and the example MarkLogic version 8 <code>Dockerfile</code> from the <code>marklogic-cluster</code> directory.
   </ul>
   <p/>
-<li>Copy the MarkLogic Version 8 .rpm file to the same directory that contains the <code>docker-compose.yml</code> and the Dockerfile.
+<li>Copy the MarkLogic Version 8 .rpm file to the same directory that contains the <code>docker-compose.yml</code> and the Dockerfile. Ensure the name of the .rpm in the Dockerfile is the same as the name of the .rpm downloaded.
 <p/>
 <li>Run the docker-compose command, <code>docker-compose up</code> in the current directory.
 <p/>
