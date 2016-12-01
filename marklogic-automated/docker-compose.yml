@@ -1,0 +1,54 @@
+version: '2'
+services:
+  mlnode1: 
+    build: .
+    image: ml8:build
+#    volumes:
+#      - ~/dev/docker/volumes/cluster/node1:/var/opt/MarkLogic
+    expose:
+      - "7997"
+      - "7998"
+      - "7999"
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+      - "8010:8010"
+    hostname: "ml1.local"
+    container_name: "ml1.local"
+  mlnode2:
+    image: ml8:build
+#    volumes:
+#      - ~/dev/docker/volumes/cluster/node2:/var/opt/MarkLogic
+    expose:
+      - "7997"
+      - "7998"
+      - "7999"
+    ports:
+      - "18000:8000"
+      - "18001:8001"
+      - "18002:8002"
+      - "18010:8010"
+    hostname: "ml2.local"
+    container_name: "ml2.local"
+    links:
+      - mlnode1:mlnode1
+  mlnode3:
+    image: ml8:build
+#    volumes:
+#      - ~/dev/docker/volumes/cluster/node3:/var/opt/MarkLogic
+    expose:
+      - "7997"
+      - "7998"
+      - "7999"
+    ports:
+      - "28000:8000"
+      - "28001:8001"
+      - "28002:8002"
+      - "28010:8010"
+    hostname: "ml3.local"
+    container_name: "ml3.local"
+    links:
+      - mlnode1:mlnode1
+      - mlnode2:mlnode2
+    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public && ./tmp/add-to-cluster.sh -u admin -p admin ml1.local ml2.local ml3.local && tail -f /dev/null"
