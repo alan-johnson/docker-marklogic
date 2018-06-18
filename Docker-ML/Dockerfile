@@ -32,5 +32,5 @@ RUN yum -y install /tmp/MarkLogic.rpm && rm /tmp/MarkLogic.rpm
 EXPOSE 7997 7998 7999 8000 8001 8002 8003 8004 8005 8006 8007 8008 8009 8010
 
 # Start MarkLogic from the init.d script
-# Define default command for Docker to run (which avoids immediate shutdown)
+# Define default command for Docker to run (which avoids immediate shutdown)  /dev/null is the bit-bucket: the place where you dump anything you don't need.
 CMD /etc/init.d/MarkLogic start && tail -f /dev/null
