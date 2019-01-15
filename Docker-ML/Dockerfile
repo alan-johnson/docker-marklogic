@@ -1,7 +1,3 @@
-# Many thanks to Tom McGrath and Patrick McElwee for their initial Dockerfiles
-#
-# https://github.com/patrickmcelwee/marklogic-dependencies/blob/master/Dockerfile
-# https://hub.docker.com/r/patrickmcelwee/marklogic-dependencies/
 #
 # Get the latest CentOS 7 image
 FROM centos:7
@@ -20,17 +16,22 @@ RUN yum -y install initscripts && yum clean all
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/MarkLogic/mlcmd/bin
 
 # Copy the MarkLogic installer to a temp directory in the Docker image being built
-# Make sure you are using MarkLogic 9.0-5 or later. These version support being containerized.
 COPY MarkLogic-9*.rpm /tmp/MarkLogic.rpm
+
+# Optionally, copy the MarkLogic Converters installer to a temp directory in the Docker image being built
+COPY MarkLogicConverters-9*.rpm /tmp/MarkLogicConverters.rpm
 
 # Install MarkLogic then delete the .RPM file if the install succeeded
 RUN yum -y install /tmp/MarkLogic.rpm && rm /tmp/MarkLogic.rpm
+
+# Optionally, install MarkLogic Converters then delete the .RPM file if the install succeeded
+RUN yum -y install /tmp/MarkLogicConverters.rpm && rm /tmp/MarkLogicConverters.rpm
 
 # Expose MarkLogic Server ports.
 # These expose ports between Docker Containers.
 # Publish your application ports in the Docker run command using -p (See Docker Documentation)
 EXPOSE 7997 7998 7999 8000 8001 8002 8003 8004 8005 8006 8007 8008 8009 8010
 
-# Start MarkLogic from the init.d script
-# Define default command for Docker to run (which avoids immediate shutdown)  /dev/null is the bit-bucket: the place where you dump anything you don't need.
+# Start MarkLogic from init.d script.
+# Define default command (which avoids immediate shutdown)
 CMD /etc/init.d/MarkLogic start && tail -f /dev/null

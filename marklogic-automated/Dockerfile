@@ -1,7 +1,3 @@
-# Many thanks to Tom McGrath and Patrick McElwee for their initial Dockerfiles
-#
-# https://github.com/patrickmcelwee/marklogic-dependencies/blob/master/Dockerfile
-# https://hub.docker.com/r/patrickmcelwee/marklogic-dependencies/
 #
 # Get the latest CentOS 7 image
 FROM centos:7
@@ -20,7 +16,10 @@ RUN yum -y install initscripts && yum clean all
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/MarkLogic/mlcmd/bin
 
 # Copy the MarkLogic installer to a temp directory in the Docker image being built
-COPY MarkLogic-9.0-5.1.x86_64.rpm /tmp/MarkLogic.rpm
+COPY MarkLogic-9*.rpm /tmp/MarkLogic.rpm
+
+# Optionally, copy the MarkLogic Converters installer to a temp directory in the Docker image being built
+COPY MarkLogicConverters-9*.rpm /tmp/MarkLogicConverters.rpm
 
 COPY initialize-ml.sh /tmp/initialize-ml.sh
 COPY add-to-cluster.sh /tmp/add-to-cluster.sh
@@ -28,6 +27,9 @@ RUN chmod +x /tmp/*.sh
 
 # Install MarkLogic then delete the .RPM file if the install succeeded
 RUN yum -y install /tmp/MarkLogic.rpm && rm /tmp/MarkLogic.rpm
+
+# Optionally, install MarkLogic Converters then delete the .RPM file if the install succeeded
+RUN yum -y install /tmp/MarkLogicConverters.rpm && rm /tmp/MarkLogicConverters.rpm
 
 # Expose MarkLogic Server ports.
 # These expose ports between Docker Containers.

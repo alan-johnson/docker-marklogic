@@ -1,54 +1,89 @@
-version: '2'
+version: '3'
 services:
-  mlnode1: 
+  mlnode1:
     build: .
-    image: ml8:build
-#    volumes:
-#      - ~/dev/docker/volumes/cluster/node1:/var/opt/MarkLogic
-    expose:
-      - "7997"
-      - "7998"
-      - "7999"
+    image: ml9:latest
     ports:
-      - "8000:8000"
-      - "8001:8001"
-      - "8002:8002"
+      - "8000-8003:8000-8003"
       - "8010:8010"
     hostname: "ml1.local"
     container_name: "ml1.local"
+# set environment variables for the MarkLogic administrator username and password
+# to be sent in on the container command line to initialize MarkLogic. Note:
+# these environment values must be set on your command line *before* running
+# "docker-compose up".
+    environment:
+      - USER
+      - PASS
+    networks:
+      - "marklogic"
+    volumes:
+      - "marklogic:/var/opt/MarkLogic"
+    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public
+
   mlnode2:
-    image: ml8:build
-#    volumes:
-#      - ~/dev/docker/volumes/cluster/node2:/var/opt/MarkLogic
-    expose:
-      - "7997"
-      - "7998"
-      - "7999"
+    image: ml9:latest
     ports:
-      - "18000:8000"
-      - "18001:8001"
-      - "18002:8002"
+      - "18000-18003:8000-8003"
       - "18010:8010"
     hostname: "ml2.local"
     container_name: "ml2.local"
-    links:
-      - mlnode1:mlnode1
+# depends_on determines the start order of services. we want mlnode3 to start
+#  after mlnode1
+    depends_on:
+      - mlnode1
+# set environment variables for the MarkLogic administrator username and password
+# to be sent in on the container command line to initialize MarkLogic. Note:
+# these environment values must be set on your command line *before* running
+# "docker-compose up".
+    environment:
+      - USER
+      - PASS
+    networks:
+      - "marklogic"
+    volumes:
+      - "marklogic2:/var/opt/MarkLogic"
+    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public
+
+# links are a legacy feature in Version 3 of the Docker Compose file.
+# by default, all services can communicate with each other within the
+#  docker network.
+#    links:
+#      - mlnode1:mlnode1
   mlnode3:
-    image: ml8:build
-#    volumes:
-#      - ~/dev/docker/volumes/cluster/node3:/var/opt/MarkLogic
-    expose:
-      - "7997"
-      - "7998"
-      - "7999"
+    image: ml9:latest
     ports:
-      - "28000:8000"
-      - "28001:8001"
-      - "28002:8002"
+      - "28000-28003:8000-8003"
       - "28010:8010"
     hostname: "ml3.local"
     container_name: "ml3.local"
-    links:
-      - mlnode1:mlnode1
-      - mlnode2:mlnode2
-    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public && ./tmp/add-to-cluster.sh -u admin -p admin ml1.local ml2.local ml3.local && tail -f /dev/null"
+# start after mlnode1 and mlnode2
+    depends_on:
+      - mlnode1
+      - mlnode2
+# set environment variables for the MarkLogic administrator username and password
+# to be sent in on the container command line to initialize MarkLogic. Note:
+# these environment values must be set on your command line *before* running
+# "docker-compose up".
+    environment:
+      - USER
+      - PASS
+    networks:
+      - "marklogic"
+    volumes:
+      - "marklogic3:/var/opt/MarkLogic"
+    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public && ./tmp/add-to-cluster.sh -u ${USER} -p ${PASS} ml1.local ml2.local ml3.local && tail -f /dev/null"
+
+# links are a legacy feature in Version 3 of the Docker Compose file.
+#    links:
+#      - mlnode1:mlnode1
+#      - mlnode2:mlnode2
+
+networks:
+  marklogic:
+
+# create a volume per MarkLogic service to store each service's MarkLogic data.
+volumes:
+  marklogic:
+  marklogic2:
+  marklogic3:
