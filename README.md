@@ -75,7 +75,7 @@ To use these scripts, follow the instructions below.
 	`<admin>` is the desired username of the administrator account.  
 	`<some-password>` is the desired password for the administrator account.
 
-####Using the `docker-compose.yml` file
+#### Using the `docker-compose.yml` file
 The `docker-compose.yml` file also uses the environment variables, `USER` and `PASS` to pass the desired administrator username and password to the created MarkLogic server nodes.
 >Important: Ensure you set these variables to desired values **before** calling `docker-compose up`.
 
