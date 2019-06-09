@@ -19,7 +19,7 @@ services:
       - "marklogic"
     volumes:
       - "marklogic:/var/opt/MarkLogic"
-    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public
+    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public"
 
   mlnode2:
     image: ml9:latest
@@ -43,7 +43,7 @@ services:
       - "marklogic"
     volumes:
       - "marklogic2:/var/opt/MarkLogic"
-    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public
+    command: /bin/sh -c "/etc/init.d/MarkLogic start && ./tmp/initialize-ml.sh -u ${USER} -p ${PASS} -r public"
 
 # links are a legacy feature in Version 3 of the Docker Compose file.
 # by default, all services can communicate with each other within the
