@@ -3,7 +3,7 @@ Here you'll find Dockerfiles to create a Docker container image with MarkLogic i
 
 Windows has an optional hypervisor feature (Hyper-V). Newer versions of Docker enable this feature. Since one cannot have simultaneous hypervisors, this causes an issue when trying to use Docker along with other hypervisors such as VMWare or Virtual Box. Information has also been included on managing this. This information contains no guarantees, your mileage may vary.  
 
-> Note: Windows is now offering Windows-based containers. This README and accompanioning data files, including any Dockerfile, targets CentOS 7-based MarkLogic installations. Creating Windows-based containers is beyond the scope of this document.
+> Note: Windows is now offering Windows-based containers. This README and accompanying data files, including any Dockerfile, targets CentOS 7-based MarkLogic installations. Creating Windows-based containers is beyond the scope of this document.
 
 At the end of this README, you'll find instructions and example files for creating a MarkLogic Docker container and have it fully initialzed. Script files use MarkLogic's REST api to initialze the MarkLogic installation and create an administrator account rather than doing it manually. Please read the instructions fully. Proper environment variables must be set for the scripts to work correctly.
 
